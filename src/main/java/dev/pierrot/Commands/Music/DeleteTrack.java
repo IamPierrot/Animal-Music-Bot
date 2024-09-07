@@ -31,7 +31,7 @@ public class DeleteTrack extends PrefixCommand {
             int index = Integer.parseInt(args.getFirst());
             var guildMusicManger = getOrCreateMusicManager(event.getGuild().getIdLong());
             if (index <= 0) throw new IllegalArgumentException();
-            Objects.requireNonNull(guildMusicManger).scheduler.queue.remove(index-1);
+            Objects.requireNonNull(guildMusicManger).scheduler.removeTrack(index-1);
         } catch (NullPointerException | IllegalArgumentException exception) {
             if (exception instanceof IllegalArgumentException) {
                 event.getMessage().reply("❌ | Nhập sai cú pháp!").queue();

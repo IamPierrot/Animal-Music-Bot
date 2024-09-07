@@ -4,6 +4,7 @@ import dev.arbjerg.lavalink.client.LavalinkClient;
 import dev.arbjerg.lavalink.client.LavalinkNode;
 import dev.arbjerg.lavalink.client.NodeOptions;
 import dev.arbjerg.lavalink.client.event.*;
+import dev.pierrot.Main;
 import dev.pierrot.Utils;
 import org.slf4j.Logger;
 
@@ -21,7 +22,7 @@ public class LavaLinkListener extends Utils {
         client.addNode(
                 new NodeOptions.Builder()
                         .setName("localhost")
-                        .setServerUri("http://localhost:2333")
+                        .setServerUri("http://localhost:%d".formatted(Main.config.getApp().port))
                         .setPassword("youshallnotpass")
                         .build()
         );

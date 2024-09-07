@@ -135,6 +135,13 @@ public class TrackScheduler extends Utils {
                         .subscribe()
         );
     }
+
+    public synchronized void removeTrack(int index) {
+        List<Track> temp = new ArrayList<>(queue);
+        temp.remove(index);
+        queue.clear();
+        queue.addAll(temp);
+    }
     ///////////////////////////////////////////
 
 

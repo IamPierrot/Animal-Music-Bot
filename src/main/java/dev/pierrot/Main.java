@@ -36,6 +36,7 @@ public class Main extends Utils {
             public String prefix;
             public String TOKEN;
             public boolean global;
+            public int port;
         }
 
     }
