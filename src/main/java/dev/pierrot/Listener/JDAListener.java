@@ -5,10 +5,14 @@ import dev.pierrot.App;
 import dev.pierrot.Commands.PrefixCommand;
 import dev.pierrot.Component.ButtonComponent;
 import dev.pierrot.Handlers.GuildMusicManager;
+import dev.pierrot.Service.AnimalSync;
 import dev.pierrot.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -22,16 +26,30 @@ import java.util.Map;
 
 public class JDAListener extends ListenerAdapter {
     public static final Map<Long, GuildMusicManager> musicManagers = new HashMap<>();
-    private static final Logger LOG = Utils.getLogger(JDAListener.class);
+    private static final Logger logger = Utils.getLogger(JDAListener.class);
     private final LavalinkClient client = App.client;
+    private final AnimalSync animalSync = App.animalSync;
 
-    public JDAListener() {}
+    public JDAListener() {
+    }
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         PrefixCommand.loadCommands();
         ButtonComponent.loadButtonComponents();
-        LOG.info("{} is ready!", event.getJDA().getSelfUser().getAsTag());
+        animalSync.getHubConnection().send("guild_sync", event.getJDA().getSelfUser().getId(), event.getJDA().getGuilds().stream().map(ISnowflake::getId).toArray());
+
+        logger.info("{} is ready!", event.getJDA().getSelfUser().getAsTag());
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        animalSync.getHubConnection().send("guild_sync", event.getJDA().getSelfUser().getId(), event.getJDA().getGuilds().stream().map(ISnowflake::getId).toArray());
+    }
+
+    @Override
+    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+        animalSync.getHubConnection().send("guild_sync", event.getJDA().getSelfUser().getId(), event.getJDA().getGuilds().stream().map(ISnowflake::getId).toArray());
     }
 
     @Override

@@ -37,6 +37,7 @@ public class Main extends Utils {
             public String TOKEN;
             public boolean global;
             public int port;
+            public String websocket;
         }
 
     }

@@ -6,6 +6,7 @@ import dev.arbjerg.lavalink.client.event.WebSocketClosedEvent;
 import dev.arbjerg.lavalink.client.loadbalancing.builtin.VoiceRegionPenaltyProvider;
 import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;
 import dev.pierrot.Listener.JDAListener;
+import dev.pierrot.Service.AnimalSync;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -15,15 +16,17 @@ import java.util.Objects;
 
 import static dev.pierrot.Listener.LavaLinkListener.lavaLinkRegisterEvents;
 
-public class App extends Utils {
+public final class App extends Utils {
     public static LavalinkClient client;
     public static JDA jda;
+    public static AnimalSync animalSync;
 
     private static final int SESSION_INVALID = 4006;
-    protected final String TOKEN = Main.config.getApp().TOKEN;
+    final String TOKEN = Main.config.getApp().TOKEN;
 
     private App() throws InterruptedException {
         client = new LavalinkClient(Helpers.getUserIdFromToken(TOKEN));
+        animalSync = new AnimalSync(String.valueOf(client.getUserId()));
         jda = JDABuilder.createDefault(TOKEN)
                 .setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(client))
                 .enableIntents(GatewayIntent.GUILD_VOICE_STATES)
@@ -32,6 +35,8 @@ public class App extends Utils {
                 .addEventListeners(new JDAListener())
                 .build()
                 .awaitReady();
+
+        animalSync.start();
     }
 
     public static void appInitialize() throws InterruptedException {
@@ -56,8 +61,6 @@ public class App extends Utils {
                 }
 
                 final var connectedChannel = Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel();
-
-                // somehow
                 if (connectedChannel == null) {
                     return;
                 }

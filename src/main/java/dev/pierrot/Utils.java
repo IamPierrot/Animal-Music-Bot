@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Utils {
+    public static Map<String, Long> cooldowns = new HashMap<>();
+
     public static Logger getLogger(String name) {
         return LoggerFactory.getLogger(name);
     }
@@ -25,8 +27,6 @@ public class Utils {
     public static Logger getLogger(Class<?> clazz) {
         return LoggerFactory.getLogger(clazz);
     }
-
-    public static Map<String, Long> cooldowns = new HashMap<>();
 
     public static GuildMusicManager getOrCreateMusicManager(long guildId, MessageChannelUnion metadata) {
         synchronized (JDAListener.class) {
@@ -39,7 +39,9 @@ public class Utils {
             return guildMusicManager;
 
         }
-    }   public static @Nullable GuildMusicManager getOrCreateMusicManager(long guildId) {
+    }
+
+    public static @Nullable GuildMusicManager getOrCreateMusicManager(long guildId) {
         synchronized (JDAListener.class) {
             return JDAListener.musicManagers.getOrDefault(guildId, null);
         }

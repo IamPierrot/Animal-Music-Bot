@@ -29,6 +29,7 @@ public class Play extends PrefixCommand {
 
     @Override
     public void callback(LavalinkClient client, MessageReceivedEvent event, List<String> args) {
+
         var guild = event.getGuild();
 
         if (!Objects.requireNonNull(guild.getSelfMember().getVoiceState()).inAudioChannel()) {

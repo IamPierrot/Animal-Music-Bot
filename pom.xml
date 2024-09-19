@@ -155,5 +155,10 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.signalr</groupId>
+            <artifactId>signalr</artifactId>
+            <version>9.0.0-preview.6.24328.4</version>
+        </dependency>
     </dependencies>
 </project>
