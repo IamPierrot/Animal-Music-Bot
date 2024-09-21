@@ -2,6 +2,8 @@ package dev.pierrot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.mongodb.client.MongoClient;
+import dev.pierrot.Database.MongoDB;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.net.URL;
 
 public class Main extends Utils {
     public static Configuration config;
+    public static MongoClient mongoClient ;
 
     public static void main(String[] args) throws InterruptedException {
         String configPath = isRunningFromJar() ? "config.yml" : "src/main/resources/config.yml";
@@ -21,6 +24,7 @@ public class Main extends Utils {
             throw new RuntimeException(e);
         }
         App.appInitialize();
+        mongoClient = new MongoDB().mongoClient;
     }
 
     public static class Configuration {
@@ -37,6 +41,7 @@ public class Main extends Utils {
             public String TOKEN;
             public boolean global;
             public int port;
+            public String MONGO_URI;
         }
 
     }
